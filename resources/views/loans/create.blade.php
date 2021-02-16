@@ -35,10 +35,9 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select
-                                                class="selectpicker form-control form-control-lg @error('income_source') is-invalid @enderror"
+                                                class="selectpicker form-control  @error('income_source') is-invalid @enderror"
                                                 name="income_source" id="income_source" value={{ old('income_source') }}
                                                 data-style="btn-outline-secondary btn-lg" title="Income Source" required>
-                                                data-style="btn-outline-secondary btn-lg"
                                                 <!--option data-display="Income Source">Income Source</option-->
                                                 <option value="Employee">Employee</option>
                                                 <option value="Self Employed">Self Employed</option>
@@ -73,7 +72,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <select
-                                                    class="selectpicker form-control form-control-lg @error('credit_score') is-invalid @enderror"
+                                                    class="selectpicker form-control  @error('credit_score') is-invalid @enderror"
                                                     name="credit_score" id="credit_score" value={{ old('credit_score') }}
                                                     data-style="btn-outline-secondary btn-lg"
                                                     title="What's your Credit Score?" required>
@@ -168,7 +167,7 @@
                                             <div class="form-group">
                                                 <label>State</label>
                                                 <select name="state" id="state" value="{{ old('state') }}" required
-                                                    class="selectpicker form-control form-control-lg @error('state') is-invalid @enderror"
+                                                    class="selectpicker form-control  @error('state') is-invalid @enderror"
                                                     data-style="btn-outline-secondary btn-lg" title="Not Chosen">
                                                     <option>Alabama</option>
                                                     <option>Alaska</option>
@@ -232,7 +231,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <select
-                                                    class="selectpicker form-control form-control-lg @error('purpose') is-invalid @enderror"
+                                                    class="selectpicker form-control  @error('purpose') is-invalid @enderror"
                                                     name="purpose" id="purpose" value="{{ old('purpose') }}" required
                                                     title="Purpose">
                                                     <!--option data-display="Purpose">Purpose of Loan</option-->
@@ -258,10 +257,9 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <select
-                                                class="selectpicker form-control form-control-lg @error('amount') is-invalid @enderror"
-                                                name="amount" title="Amount" id="amount" value="{{ old('amount') }}"
-                                                required>
+                                            <select class="selectpicker form-control  @error('amount') is-invalid @enderror"
+                                                name="amount" data-style="btn-outline-secondary btn-lg" title="Amount"
+                                                id="amount" required>
                                                 <option value="5000">$5000</option>
                                                 <option value="10000">$10000</option>
                                                 <option value="20000">$20000</option>
@@ -303,7 +301,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <select
-                                                class="selectpicker form-control form-control-lg @error('payment_method') is-invalid @enderror"
+                                                class="selectpicker form-control  @error('payment_method') is-invalid @enderror"
                                                 required name="payment_method" id="payment_method"
                                                 value="{{ old('payment_method') }}" title="Payment Method">
                                                 <option value="Wire Transfer">Wire Transfer</option>
@@ -341,33 +339,36 @@
                                     </ul>
                                 </div>
                             </section>
-                            <br>
-                            <div class="form-group mb-0">
-                                <input type="submit" class="btn btn-primary" value="Submit">
-                            </div>
                         </form>
                     </div>
                 </div>
 
-                <!-- success Popup html Start -->
-                <div class="modal fade" id="success-modal" tabindex="-1" role="dialog"
-                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-body text-center font-18">
-                                <h3 class="mb-20">Your Loan Application has been Submitted</h3>
-                                <div class="mb-30 text-center"><img src="{{ asset('vendors/images/success.png') }}">
+                @isset($failure)
+                    @if ($failure)
+                        <!-- Not Successful Popup html Start -->
+                        <div class="modal fade" id="failure-modal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center font-18">
+                                        <h3 class="mb-20" style="color: red;">Sorry, an internal error occured. Please try
+                                            again.</h3>
+                                        <div class="mb-30 text-center"><img src="{{ asset('vendors/images/cross.png') }}">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                                    </div>
                                 </div>
-                                Processing May take up to 30 minutes to 2 hours. Please Check your Email Address for more
-                                information on Approval of loan.
-                            </div>
-                            <div class="modal-footer justify-content-center">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- success Popup html End -->
+                        window.addEventListener('DOMContentLoaded', function() {
+                        $('#failure-modal').modal('show');
+
+                        });
+                        <!-- Error Popup html End -->
+                    @endif
+                @endisset
             </div>
         </div>
     </div>

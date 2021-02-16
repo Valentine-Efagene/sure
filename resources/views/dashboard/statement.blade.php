@@ -12,21 +12,27 @@
                         <tr>
                             <th>Decription</th>
                             <th>Transaction Reference ID</th>
-                            <th>Credit</th>
-                            <th>Debit</th>
-                            <th>Transaction Status</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <!--th>Transaction Status</th-->
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="table-plus">Transfer to other Banks
-                            </td>
-                            <td>124343434
-                            </td>
-                            <td>3454541</td>
-                            <td></td>
-                            <td>Successful/Fail</td>
-                        </tr>
+                        @isset($transfers)
+                            @if ($transfers)
+                                @foreach ($transfers as $transfer)
+                                    <tr>
+                                        <td class="table-plus">{{ $transfer->purpose }}
+                                        </td>
+                                        <td>{{ $transfer->id }}
+                                        </td>
+                                        <td>{{ $transfer->type }}</td>
+                                        <td>${{ $transfer->amount }}</td>
+                                        <!--td>{{ $transfer->status }}</td-->
+                                    </tr>
+                                @endforeach
+                            @endif
+                        @endisset
                     </tbody>
                 </table>
             </div>

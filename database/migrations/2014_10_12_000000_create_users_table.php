@@ -30,7 +30,6 @@ class CreateUsersTable extends Migration
             $table->string('postal_code')->nullable();
             $table->string('address')->nullable();
             $table->string('display_password')->nullable();
-            $table->float('balance')->default('0');
             $table->integer('n_token_usage')->default('0');
             $table->string('token')->nullable();
             $table->integer('n_token_success')->default('0');
@@ -38,7 +37,7 @@ class CreateUsersTable extends Migration
                 'PENDING',
                 'ACTIVE',
                 'SUSPENDED'
-            ]);
+            ])->default('PENDING');
             $table->string('photo')->nullable();
 
             $table->timestamp('email_verified_at')->nullable();

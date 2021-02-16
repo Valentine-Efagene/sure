@@ -6,6 +6,7 @@ use App\Models\Transfer;
 use App\Models\User;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
+use Illuminate\Support\MessageBag;
 
 class TransferController extends Controller
 {
@@ -21,7 +22,7 @@ class TransferController extends Controller
     }
 
     /**
-     * Store tranfer
+     * Debit transfer. Credit is done by the admins.
      * 
      * @return view
      **/
@@ -45,17 +46,28 @@ class TransferController extends Controller
                 $user = auth()->user();
 
                 if ($user->n_token_usage >= $user->n_token_success) {
-                    $fail('Token has been exhausted.');
+                    $fail('Your account is suspended.');
                 }
             },]
         ]);
 
-        $user = auth()->user();
+        $user = User::find(auth()->user()->id);
 
-        /*if ($user->n_token_usage >= $user->n_token_success) {
-            $failure = true;
-            return view('transfer', compact(['failure', 'user']));
-        }*/
+        if ($user->status === 'SUSPENDED') {
+            $messages = ['errors' => 'Your account is suspended.'];
+            $messageBag = new MessageBag($messages);
+            return redirect()->route('transfer', compact('user'))->withErrors($messageBag)->withInput();
+        }
+
+        $credits = $user->transfer->where('type', 'CREDIT')->sum('amount');
+        $debits = $user->transfer->where('type', 'DEBIT')->sum('amount');
+        $balance = $credits - $debits;
+
+        if ($balance < $data['amount']) {
+            $messages = ['errors' => 'Insufficient funds.'];
+            $messageBag = new MessageBag($messages);
+            return redirect()->route('transfer', compact('user'))->withErrors($messageBag)->withInput();
+        }
 
         $data['type'] = 'DEBIT';
         $data['user_id'] = auth()->user()->id;
@@ -64,9 +76,12 @@ class TransferController extends Controller
         $failure = $transfer ? false : true;
 
         if ($success) {
-            User::find(auth()->user()->id)->update(['n_token_used' => auth()->user()->id + 1]);
+            $user = User::find(auth()->user()->id);
+            $user->update(['n_token_usage' => $user->n_token_usage + 1]);
         }
 
-        return view('dashboard.statement', compact(['success', 'failure', 'user']));
+        $user = User::find($user->id);
+        $transfers = $user->transfer()->orderBy('id', 'desc')->paginate(10);
+        return redirect()->route('dashboard.statement', compact(['success', 'failure', 'user', 'transfers']));
     }
 }

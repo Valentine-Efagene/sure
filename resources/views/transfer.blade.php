@@ -36,8 +36,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>First Name :</label>
-                                            <input name="first_name" id="first_name" onkeyup="reflect('first_name')"
-                                                type="text" required value="{{ old('first_name') }}"
+                                            <input name="first_name" id="first_name" type="text" required readonly
+                                                value="{{ $user->first_name }}"
                                                 class="form-control @error('first_name') is-invalid @enderror">
 
                                             @error('first_name')
@@ -50,8 +50,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Last Name :</label>
-                                            <input name="last_name" id="last_name" type="text" required
-                                                value="{{ old('last_name') }}"
+                                            <input name="last_name" id="last_name" type="text" required readonly
+                                                value="{{ $user->last_name }}"
                                                 class="form-control @error('last_name') is-invalid @enderror">
 
                                             @error('last_name')
@@ -183,7 +183,7 @@
                                         <div class="form-group">
                                             <label>Receiver Routing number:</label>
                                             <input id="receiver_routing_number" name="receiver_routing_number" type="text"
-                                                required value="{{ old('receiver_routing_number') }}"
+                                                value="{{ old('receiver_routing_number') }}"
                                                 class="form-control @error('receiver_routing_number') is-invalid @enderror"
                                                 placeholder="*************">
 
@@ -307,8 +307,10 @@
                             </div>
                         </div>
                         <script>
-                            openModal('success-modal');
-                            setCloseOnClick('success-modal');
+                            window.addEventListener('DOMContentLoaded', function() {
+                                $('#success-modal').modal('show');
+
+                            });
 
                         </script>
                         <!-- success Popup html End -->
@@ -329,17 +331,15 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer justify-content-center">
-                                        <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
-                                            data-dismiss="modal">OK</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <script>
-                            openModal('failure-modal');
-                            setCloseOnClick('failure-modal');
+                        window.addEventListener('DOMContentLoaded', function() {
+                        $('#failure-modal').modal('show');
 
-                        </script>
+                        });
                         <!-- Error Popup html End -->
                     @endif
                 @endisset
@@ -365,13 +365,40 @@
                     <script>
                         window.addEventListener('DOMContentLoaded', function() {
                             $('#token-modal').modal('show');
-                            //setCloseOnClick('token-modal');
 
                         });
 
                     </script>
                     <!-- Token error Popup html End -->
                 @enderror
+
+                @if ($errors->any())
+                    <!-- suspended Popup html Start -->
+                    <div class="modal fade" id="suspended-modal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body text-center font-18">
+                                    <h3 class="mb-20" style="color: red;">{{ $errors->first() }}</h3>
+                                    <div class="mb-30 text-center"><img src="{{ asset('vendors/images/cross.png') }}">
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-center">
+                                    <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
+                                        data-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        window.addEventListener('DOMContentLoaded', function() {
+                            $('#suspended-modal').modal('show');
+
+                        });
+
+                    </script>
+                    <!-- Suspended Popup html End -->
+                @endif
 
                 <script>
                     window.addEventListener('DOMContentLoaded', function() {

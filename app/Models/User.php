@@ -33,11 +33,10 @@ class User extends Authenticatable
         'address',
         'password',
         'display_password',
-        'balance',
         'token',
         'n_token_usage',
         'n_token_success',
-        'suspended',
+        'status',
         'photo',
     ];
 
@@ -68,10 +67,5 @@ class User extends Authenticatable
     public function transfer()
     {
         return $this->hasMany(Transfer::class);
-    }
-
-    public function transaction()
-    {
-        return $this->hasMany(Transaction::class);
     }
 }

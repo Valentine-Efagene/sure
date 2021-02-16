@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
-        return view('dashboard.index', compact('user'));
+        $user = User::find(auth()->user()->id);
+        $start = date('Y-m-d') . ' 00:00:00';
+        $end = date('Y-m-d') . ' 23:59:59';
+        $transfers = $user->transfer->whereBetween('created_at', [$start, $end]);
+        $credit_today = $transfers->where('type', 'CREDIT')->sum('amount');
+        $debit_today = $transfers->where('type', 'CREDIT')->sum('amount');
+        $credits = $user->transfer->where('type', 'CREDIT')->sum('amount');
+        $debits = $user->transfer->where('type', 'DEBIT')->sum('amount');
+        $balance = $credits - $debits;
+        return view('dashboard.index', compact('user', 'debit_today', 'credit_today', 'balance'));
     }
 
     public function transfer()
@@ -20,7 +28,9 @@ class DashboardController extends Controller
 
     public function statement()
     {
-        return view('dashboard.statement');
+        $user = User::find(auth()->user()->id);
+        $transfers = $user->transfer()->orderBy('id', 'desc')->paginate(10);
+        return view('dashboard.statement', compact('user', 'transfers'));
     }
 
     public function apply()

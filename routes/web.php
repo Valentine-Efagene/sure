@@ -37,7 +37,6 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store'); //
 
 // Client Dashboard
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/transfer', [TransferController::class, 'create'])->name('transfer');
     Route::post('/transfer', [TransferController::class, 'store'])->name('transfers.store');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -56,7 +55,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::get('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // TODO Change to delete
+    Route::get('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // TODO maybe Change to delete
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 });
 

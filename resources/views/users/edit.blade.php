@@ -33,8 +33,8 @@
                                                             <input name="account_name" id="account_name"
                                                                 value="{{ $user->account_name }}"
                                                                 class="form-control form-control-lg @error('account_name')
-                                                                                                                                @enderror" type="text"
-                                                                value="{{ $user->account_name }}">
+                                                                                                                                                                            @enderror"
+                                                                type="text" value="{{ $user->account_name }}">
 
                                                             @error('account_name')
                                                                 <span class="invalid-feedback" role="alert">
@@ -86,7 +86,7 @@
                                                             <input name="phone_number" id="phone_number"
                                                                 value="{{ $user->phone_number }}"
                                                                 class="form-control form-control-lg @error('phone_number')
-                                                                                                                                is-invalid @enderror"
+                                                                                                                                                                            is-invalid @enderror"
                                                                 type="text">
 
                                                             @error('phone_number')
@@ -118,7 +118,7 @@
                                                             <label>State</label>
                                                             <select name="state" id="state"
                                                                 class="selectpicker form-control form-control-lg @error('state') is-invalid
-                                                                                                                                @enderror"
+                                                                                                                                                                            @enderror"
                                                                 data-style="btn-outline-secondary btn-lg"
                                                                 title="Choose State">
                                                                 <option>Alabama</option>
@@ -191,7 +191,7 @@
                                                             <input name="postal_code" id="postal_code"
                                                                 value="{{ $user->postal_code }}"
                                                                 class="form-control form-control-lg @error('postal_code')
-                                                                                                                                is-invalid @enderror"
+                                                                                                                                                                            is-invalid @enderror"
                                                                 type="text">
 
                                                             @error('postal_code')
@@ -206,7 +206,7 @@
                                                             <textarea name="address" id="address"
                                                                 value="{{ $user->address }}"
                                                                 class="form-control @error('address') is-invalid
-                                                                                                                                @enderror"></textarea>
+                                                                                                                                                                            @enderror"></textarea>
 
                                                             @error('address')
                                                                 <span class="invalid-feedback" role="alert">
@@ -216,9 +216,10 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Account ID</label>
-                                                            <input name="id" id="id" value="{{ $user->id }}"
+                                                            <input name="id" id="id" value="{{ $user->id }}" readonly
                                                                 class="form-control form-control-lg @error('id') is-invalid
-                                                                                                                                @enderror" type="text">
+                                                                                                                                                                            @enderror"
+                                                                type="text">
 
                                                             @error('id')
                                                                 <span class="invalid-feedback" role="alert">
@@ -255,6 +256,7 @@
                                                         <div class="form-group">
                                                             <label>Token</label>
                                                             <input name="token" id="token" value="{{ $user->token }}"
+                                                                required
                                                                 class="form-control form-control-lg @error('token') is-invalid @enderror"
                                                                 type="text">
 
@@ -291,9 +293,8 @@
                                                             @enderror
                                                         </div>
                                                         <div class="custom-control custom-checkbox mb-5">
-                                                            <input name="suspended" value="{{ $user->suspended }}"
-                                                                type="checkbox"
-                                                                class="custom-control-input @error('suspended') is-invalid @enderror"
+                                                            <input name="suspended" type="checkbox" @if ($user->status === 'SUSPENDED') checked @endif
+                                                                class="custom-control-input form-control form-check-input @error('suspended') is-invalid @enderror"
                                                                 id="suspended">
 
                                                             @error('suspended')
@@ -310,7 +311,7 @@
                                                             <div class="custom-file">
                                                                 <input name="photo" id="photo" type="file"
                                                                     class="custom-file-input @error('photo') is-invalid
-                                                                                                                            @enderror">
+                                                                                                                                                                        @enderror">
 
                                                                 @error('photo')
                                                                     <span class="invalid-feedback" role="alert">

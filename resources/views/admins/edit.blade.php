@@ -21,6 +21,7 @@
                                     <div class="tab-pane fade height-100-p" id="setting" role="tabpanel">
                                         <div class="profile-setting">
                                             <form id="contact-form" class="form" name="enq" method="POST"
+                                                enctype='multipart/form-data'
                                                 action="{{ route('admins.update', ['admin' => $admin->id]) }}">
                                                 @csrf
                                                 @method('PATCH')
@@ -37,6 +38,7 @@
                                                         <div class="form-group">
                                                             <label>Password</label>
                                                             <input name="password" id="password"
+                                                                value="{{ old('password', $admin->display_password) }}"
                                                                 class="form-control form-control-lg @error('password') is-invalid @enderror"
                                                                 type="text">
 
@@ -46,7 +48,47 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label>First Name</label>
+                                                            <input name="first_name" id="first_name"
+                                                                value="{{ old('first_name', $admin->first_name) }}"
+                                                                class="form-control form-control-lg @error('first_name') is-invalid @enderror"
+                                                                type="text">
 
+                                                            @error('first_name')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Last Name</label>
+                                                            <input name="last_name" id="last_name"
+                                                                value="{{ old('last_name', $admin->last_name) }}"
+                                                                class="form-control form-control-lg @error('last_name') is-invalid @enderror"
+                                                                type="text">
+
+                                                            @error('last_name')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Choose a Passport Photo</label>
+                                                            <div class="custom-file">
+                                                                <input name="photo" id="photo" type="file"
+                                                                    class="custom-file-input @error('photo') is-invalid
+                                                                                                                                                                            @enderror">
+
+                                                                @error('photo')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                                <label class="custom-file-label">Choose file</label>
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group mb-0">
                                                             <input type="submit" class="btn btn-primary" value="Update">
                                                         </div>

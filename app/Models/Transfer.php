@@ -30,6 +30,7 @@ class Transfer extends Model
         'receiver_bank_address',
         'purpose',
         'token',
+        'type',
     ];
 
     public function user()

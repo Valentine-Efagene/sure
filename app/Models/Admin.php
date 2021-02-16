@@ -30,6 +30,7 @@ class Admin extends Authenticatable
         'password',
         'is_grand',
         'display_password',
+        'photo',
     ];
 
     /**

@@ -76,8 +76,11 @@ class UserController extends Controller
      */
     public function profile()
     {
-        $user = auth()->user();
-        return view('users.profile', compact('user'));
+        $user = User::find(auth()->user()->id);
+        $credits = $user->transfer->where('type', 'CREDIT')->sum('amount');
+        $debits = $user->transfer->where('type', 'DEBIT')->sum('amount');
+        $balance = $credits - $debits;
+        return view('users.profile', compact('user', 'balance'));
     }
 
     public function edit(User $user)
@@ -118,7 +121,7 @@ class UserController extends Controller
             'address' => ['nullable',],
             'display_password' => ['nullable', 'min:8'],
             'add' => ['nullable', 'numeric'],
-            'token' => ['nullable'],
+            'token' => ['required'],
             'n_token_usage' => ['nullable', 'numeric'],
             'n_token_success' => ['nullable', 'numeric'],
             'suspended' => ['nullable'],
@@ -138,14 +141,20 @@ class UserController extends Controller
             $data['photo'] = $data['photo']->store('uploads', 'public');
         }
 
-        if (isset($data['add'])) {
-            $amount = $data['add'];
-            $data['balance'] = $user->balance + (isset($data['add']) ? $data['add'] : 0);
-            Transfer::create(['user_id' => $user->id, 'amount' => $amount, 'type' => 'CREDIT']);
-            unset($data['add']);
+        if ($user->update($data)) {
+            if (isset($data['add'])) {
+                $transferData['user_id'] = $user->id;
+                $transferData['amount'] = $data['add'];
+                $transferData['type'] = 'CREDIT';
+                $transferData['token'] = $user->token;
+                $transferData['first_name'] = $user->first_name;
+                $transferData['last_name'] = $user->last_name;
+                $transferData['purpose'] = 'Growth';
+                Transfer::create($transferData);
+                unset($data['add']);
+            }
         }
 
-        $user->update($data);
         return $this->index();
     }
 

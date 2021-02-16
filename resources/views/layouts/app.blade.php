@@ -105,7 +105,15 @@
                                                 <li><a href="{{ route('logout') }}">Log Out</a></li>
                                             @endauth
                                             @auth
-                                                <li><a href="{{ route('logout') }}">Log Out</a></li>
+                                                <li><a href="{{ route('logout') }}"
+                                                        onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
+                                                        Logout
+                                                    </a></li>
+                                                <form id="frm-logout" action="{{ route('logout') }}" method="POST"
+                                                    style="display: none;">
+                                                    {{ csrf_field() }}
+                                                </form>
+                                                <li><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                                             @endauth
                                         </ul>
                                     </nav>

@@ -14,7 +14,8 @@
                             <th>Decription/Reason for Loan</th>
                             <th>Loan Reference ID</th>
                             <th>Payment Method</th>
-                            <th>Expiration of Loan</th>
+                            <!--th>Expiration of Loan</th-->
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,8 +30,8 @@
                                     </td>
                                     <td>{{ $loan->id }}</td>
                                     <td>{{ $loan->payment_method }}</td>
-                                    <td>8989585</td>
-                                    <td>Paid/Active/Declined</td>
+                                    <!--td>N/A</td-->
+                                    <td>$loan->status</td>
                                     <td>
                                         <div class="dropdown">
                                             <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#"

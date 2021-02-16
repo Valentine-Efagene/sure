@@ -78,9 +78,10 @@
                         <span class="user-icon">
                             @if (auth()->user())
                                 @if (auth()->user()->photo)
-                                    <img src="storage/app/public/{{ auth()->user()->photo }}" class="avatar-photo" />
+                                    <img src={{ asset('../storage/app/public/') . '/' . auth()->user()->photo }}
+                                        class="avatar-photo" />
                                 @else
-                                    <img src="assets/img/avatar.jpg" class="avatar-photo" />
+                                    <img src="{{ asset('img/avatar.jpg') }}" class="avatar-photo" />
                                 @endif
                             @endif
                         </span>
@@ -94,7 +95,14 @@
                         <a class="dropdown-item" href="{{ route('users.profile') }}"><i class="dw dw-user1"></i>
                             Profile</a>
                         <a class="dropdown-item" href="{{ route('faq') }}"><i class="dw dw-help"></i> Help</a>
-                        <a class="dropdown-item" href="{{ route('login') }}"><i class="dw dw-logout"></i> Log Out</a>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('frm-logout').submit();"><i
+                                class="dw dw-logout"></i>
+                            Log Out
+                        </a>
+                        <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
                     </div>
                 </div>
             </div>
@@ -230,7 +238,10 @@
                         </a>
                         <ul class="submenu">
                             <li><a href="{{ route('users.profile') }}">View Profile</a></li>
-                            <li><a href="{{ route('logout') }}">Log Out</a></li>
+                            <li><a href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('frm-logout').submit();">
+                                    Log Out
+                                </a></li>
                         </ul>
                     </li>
                 </ul>

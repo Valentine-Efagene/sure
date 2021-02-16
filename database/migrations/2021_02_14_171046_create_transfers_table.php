@@ -19,20 +19,20 @@ class CreateTransfersTable extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('address')->nullable();
             $table->string('zip_code')->nullable();
             $table->string('country')->nullable();
             $table->string('state')->nullable();
             $table->string('receiver_bank_account_name')->nullable();
             $table->string('bank_name')->nullable();
-            $table->float('amount')->nullable();
+            $table->float('amount');
             $table->string('receiver_account_number')->nullable();
             $table->string('receiver_routing_number')->nullable();
             $table->string('receiver_bank_address')->nullable();
             $table->string('purpose')->nullable();
-            $table->string('token')->nullable();
+            $table->string('token');
             $table->enum('type', ['CREDIT', 'DEBIT']);
             $table->enum('status', ['PENDING', 'SUCCESSFUL', 'FAILED'])->default('PENDING');
             $table->timestamps();

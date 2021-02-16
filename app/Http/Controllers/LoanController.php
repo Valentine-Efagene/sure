@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loan;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LoanController extends Controller
@@ -14,15 +15,15 @@ class LoanController extends Controller
 
   public function history()
   {
-    $loans = Loan::orderBy('id', 'asc')->paginate(10);
-    $user = auth()->user();
+    $user = User::find(auth()->user()->id);
+    $loans = $user->loan()->orderBy('id', 'desc')->paginate(10);
     return view('loans.history', compact(['loans', 'user']));
   }
 
   public function active()
   {
-    $loans = Loan::where('status', 'ACTIVE')->orderBy('id', 'asc')->paginate(10);
-    $user = auth()->user();
+    $user = User::find(auth()->user()->id);
+    $loans = $user->loan()->where('status', 'PENDING')->orderBy('id', 'desc')->paginate(10);
     return view('loans.active', compact(['user', 'loans']));
   }
 
@@ -35,8 +36,14 @@ class LoanController extends Controller
   {
     $data = $request->validate(['income_source' => ['required'], 'annual_income' => ['required'], 'credit_score' => ['required'], 'employer' => [], 'company' => ['required'], 'company_address' => ['required'], 'company_reg' => [], 'zip_code' => ['required'], 'state' => ['required'], 'purpose' => ['required'], 'amount' => [], 'note' => [], 'payment_method' => ['required']]);
     $data['user_id'] = auth()->user()->id;
-    Loan::create($data);
+    $loan = Loan::create($data);
+    $success = $loan ? true : false;
 
-    return redirect()->route('loans.history');
+    if ($success) {
+      return redirect()->route('loans.history', compact('success'));
+    }
+
+    $failure = true;
+    return redirect()->route('loans.create', compact('failure'));
   }
 }

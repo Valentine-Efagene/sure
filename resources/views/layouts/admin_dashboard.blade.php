@@ -50,7 +50,14 @@
                 <div class="dropdown">
                     <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                         <span class="user-icon">
-                            <img src="{{ asset('/vendors/images/photo1.jpg') }}" alt="">
+                            @if (auth('admin')->user())
+                                @if (auth('admin')->user()->photo)
+                                    <img src={{ asset('../storage/app/public/') . '/' . auth('admin')->user()->photo }}
+                                        class="avatar-photo" />
+                                @else
+                                    <img src={{ asset('img/avatar.jpg') }} class="avatar-photo" />
+                                @endif
+                            @endif
                         </span>
                         <span
                             class="user-name">{{ auth('admin')->user()->first_name . ' ' . auth('admin')->user()->last_name }}</span>
@@ -176,6 +183,12 @@
                         <ul class="submenu">
                             <li><a href="{{ route('admins.create') }}">Add a new Admin</a></li>
                             <!--This Link should only be available to Grand Admin. Other Admin are not eligible for this-->
+                        </ul>
+                        <ul class="submenu">
+                            <li><a href="{{ route('admins.index') }}">Admins</a></li>
+                        </ul>
+                        <ul class="submenu">
+                            <li><a href="{{ route('users.index') }}">Users</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">

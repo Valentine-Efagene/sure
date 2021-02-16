@@ -73,6 +73,13 @@ class AdminController extends Controller
      */
     public function edit(Admin $admin)
     {
+        if ($admin->display_password != null) {
+            try {
+                $admin->display_password = Crypt::decryptString($admin->display_password);
+            } catch (DecryptException $e) {
+                //
+            }
+        }
         return view('admins.edit', compact('admin'));
     }
 
@@ -84,7 +91,18 @@ class AdminController extends Controller
      */
     public function update(Admin $admin)
     {
-        $data = request()->validate(['id' => ['required', 'numeric'], 'password' => ['required']]);
+        $data = request()->validate([
+            'id' => ['required', 'numeric'],
+            'password' => ['required'],
+            'first_name' => [],
+            'last_name' => [],
+            'photo' => ['nullable'],
+        ]);
+
+        if (isset($data['photo'])) {
+            $data['photo'] = $data['photo']->store('uploads', 'public');
+        }
+
         $password = $data['password'];
         $data['display_password'] = Crypt::encryptString($password);
         $data['password'] = Hash::make($password);
