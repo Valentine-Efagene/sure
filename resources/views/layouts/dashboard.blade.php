@@ -67,7 +67,9 @@
 
     <div class="header">
         <div class="header-left">
-            <div class="menu-icon dw dw-menu">Account Balance</div>
+            {{-- https://technext.github.io/deskapp2/custom-icon.html for the icons --}}
+
+            <div class="menu-icon dw dw-menu"></div>
 
         </div>
         <div class="header-right">

@@ -32,7 +32,7 @@ class CreateTransfersTable extends Migration
             $table->string('receiver_routing_number')->nullable();
             $table->string('receiver_bank_address')->nullable();
             $table->string('purpose')->nullable();
-            $table->string('token');
+            $table->string('token')->nullable();
             $table->enum('type', ['CREDIT', 'DEBIT']);
             $table->enum('status', ['PENDING', 'SUCCESSFUL', 'FAILED'])->default('PENDING');
             $table->timestamps();

@@ -38,5 +38,49 @@
             </div>
         </div>
     </div>
+    @isset($success)
+        @if ($success)
+            <script>
+                var inputs = document.getElementsByTagName('input');
+                var textareas = document.getElementsByTagName('textarea');
+
+                for (const input in inputs) {
+                    input.value = null;
+                }
+
+                for (const textarea in textareas) {
+                    textareas.value = null;
+                }
+
+            </script>
+
+            <!-- success Popup html Start -->
+            <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-modal="true" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body text-center font-18">
+                            <h3 class="mb-20">Information has been Submitted</h3>
+                            <div class="mb-30 text-center"><img src="{{ asset('vendors/images/success.png') }}">
+                            </div>
+                            Transfer Successful
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
+                                data-dismiss="modal">Done</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                window.addEventListener('DOMContentLoaded', function() {
+                    $('#success-modal').modal('show');
+
+                });
+
+            </script>
+            <!-- success Popup html End -->
+        @endif
+    @endisset
     <!--End of Statement-->
 @endsection

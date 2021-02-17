@@ -61,6 +61,10 @@
                                                     <a class="dropdown-item"
                                                         href="{{ route('users.edit', ['user' => $user->id]) }}"><i
                                                             class="dw dw-edit2"></i> Edit</a>
+                                                    <a class="dropdown-item" href=""
+                                                        onclick="credit(event, {{ $user->id }})"><i class="dw dw-money"></i>
+                                                        Add
+                                                        fund</a>
                                                     <a class="dropdown-item"
                                                         href="{{ route('users.destroy', ['user' => $user->id]) }}"><i
                                                             class="dw dw-delete-3"></i> Delete</a>
@@ -77,4 +81,122 @@
             <!--End of Statement-->
         </div>
     </div>
+
+    @isset($success)
+        @if ($success)
+            <script>
+                var inputs = document.getElementsByTagName('input');
+                var textareas = document.getElementsByTagName('textarea');
+
+                for (const input in inputs) {
+                    input.value = null;
+                }
+
+                for (const textarea in textareas) {
+                    textareas.value = null;
+                }
+
+            </script>
+
+            <!-- success Popup html Start -->
+            <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-modal="true" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body text-center font-18">
+                            <div class="mb-30 text-center"><img src="{{ asset('vendors/images/success.png') }}">
+                            </div>
+                            Transfer Successful
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
+                                data-dismiss="modal">Done</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                window.addEventListener('DOMContentLoaded', function() {
+                    $('#success-modal').modal('show');
+
+                });
+
+            </script>
+            <!-- success Popup html End -->
+        @endif
+    @endisset
+
+    @isset($failure)
+        @if ($failure)
+            <!-- Not Successful Popup html Start -->
+            <div class="modal fade" id="failure-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body text-center font-18">
+                            <h3 class="mb-20" style="color: red;">Your Transfer was not Successful. Please try again.</h3>
+                            <div class="mb-30 text-center"><img src="{{ asset('vendors/images/cross.png') }}">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            window.addEventListener('DOMContentLoaded', function() {
+            $('#failure-modal').modal('show');
+
+            });
+            <!-- Error Popup html End -->
+        @endif
+    @endisset
+
+    <!-- Credit Popup html Start -->
+    <div class="modal fade" id="credit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('transfers.credit') }}" class="apply_form">
+                        @csrf
+                        <div class="form-group">
+                            <label>Amount:</label>
+                            <input id="amount" name="amount" type="text" value="{{ old('amount') }}" required
+                                class="form-control @error('amount') is-invalid @enderror">
+
+                            @error('amount')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <input name="user_id" id="user_id" hidden />
+                        <div class="form-group">
+                            <div class="submit_btn">
+                                <button class="form-control btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" onclick="closeModal('success-modal')" class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function credit(e, user_id) {
+            e.preventDefault();
+            $('#user_id').val(user_id);
+            $('#credit-modal').modal('show');
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+
+        });
+
+    </script>
+    <!-- Credit Popup html End -->
 @endsection

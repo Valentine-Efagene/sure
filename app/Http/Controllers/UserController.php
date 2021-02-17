@@ -120,7 +120,6 @@ class UserController extends Controller
             'postal_code' => ['nullable', 'numeric'],
             'address' => ['nullable',],
             'display_password' => ['nullable', 'min:8'],
-            'add' => ['nullable', 'numeric'],
             'token' => ['required'],
             'n_token_usage' => ['nullable', 'numeric'],
             'n_token_success' => ['nullable', 'numeric'],
@@ -141,20 +140,7 @@ class UserController extends Controller
             $data['photo'] = $data['photo']->store('uploads', 'public');
         }
 
-        if ($user->update($data)) {
-            if (isset($data['add'])) {
-                $transferData['user_id'] = $user->id;
-                $transferData['amount'] = $data['add'];
-                $transferData['type'] = 'CREDIT';
-                $transferData['token'] = $user->token;
-                $transferData['first_name'] = $user->first_name;
-                $transferData['last_name'] = $user->last_name;
-                $transferData['purpose'] = 'Growth';
-                Transfer::create($transferData);
-                unset($data['add']);
-            }
-        }
-
+        $user->update($data);
         return $this->index();
     }
 

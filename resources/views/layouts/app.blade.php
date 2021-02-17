@@ -241,7 +241,7 @@
 
 
     <!--contact js-->
-    <script src="{{ asset('js/contact.js') }}"></script>
+    <!--script src="{{ asset('js/contact.js') }}"></script--> {{-- Produces 'TypeError: jQuery.validator is undefined' error, and causes the menu button not to display --}}
     <script src="{{ asset('js/jquery.ajaxchimp.min.js') }}"></script>
     <script src="{{ asset('js/jquery.form.js') }}"></script>
     <script src="{{ asset('js/jquery.validate.min.js') }}"></script>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Transfer;
 use App\Models\User;
 use GrahamCampbell\ResultType\Success;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\MessageBag;
 
 class TransferController extends Controller
@@ -22,11 +24,11 @@ class TransferController extends Controller
     }
 
     /**
-     * Debit transfer. Credit is done by the admins.
+     * Debit transfer
      * 
      * @return view
      **/
-    public function store()
+    public function debit()
     {
         $data = request()->validate([
             'first_name' => [],
@@ -83,5 +85,42 @@ class TransferController extends Controller
         $user = User::find($user->id);
         $transfers = $user->transfer()->orderBy('id', 'desc')->paginate(10);
         return redirect()->route('dashboard.statement', compact(['success', 'failure', 'user', 'transfers']));
+    }
+
+    /**
+     * Credit transfer
+     *
+     * @return redirect
+     **/
+    public function credit()
+    {
+        $data = request()->validate(['user_id' => ['required'], 'amount' => ['required', 'numeric']]);
+        $user = User::find($data['user_id']);
+        $data['first_name'] = $user->first_name;
+        $data['last_name'] = $user->last_name;
+        $data['status'] = 'SUCCESSFUL';
+        $data['type'] = 'CREDIT';
+        $data['token'] = 'sdjsnkf';  // TODO remove
+
+        $transfer = Transfer::create($data);
+
+        $success = $transfer ? true : false;
+        $failure = $transfer ? false : true;
+
+        $users = User::paginate(10);
+        //$users = User::all();
+
+        foreach ($users as $user) {
+            if ($user->display_password != null) {
+                try {
+                    $user->display_password = Crypt::decryptString($user->display_password);
+                } catch (DecryptException $e) {
+                    //
+                }
+            }
+        }
+
+        return view('users.index', compact(['users', 'success', 'failure']));
+        //return redirect()->route('users.index', compact(['success', 'failure']));
     }
 }

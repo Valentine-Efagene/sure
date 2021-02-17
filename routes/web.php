@@ -38,7 +38,7 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store'); //
 // Client Dashboard
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/transfer', [TransferController::class, 'create'])->name('transfer');
-    Route::post('/transfer', [TransferController::class, 'store'])->name('transfers.store');
+    Route::post('/transfers/debit', [TransferController::class, 'debit'])->name('transfers.debit');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/statement', [DashboardController::class, 'statement'])->name('dashboard.statement');
     Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
@@ -57,6 +57,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::get('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // TODO maybe Change to delete
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/transfers/credit', [TransferController::class, 'credit'])->name('transfers.credit');
 });
 
 // Grand Admin
