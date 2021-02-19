@@ -49,6 +49,7 @@
                         @endisset
                     </tbody>
                 </table>
+                {{ $loans->links() }}
             </div>
             <!--End of Active Loans-->
             @isset($success)

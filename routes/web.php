@@ -4,7 +4,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EmailController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
@@ -37,6 +36,7 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store'); //
 
 // Client Dashboard
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/transfer', [TransferController::class, 'create'])->name('transfer');
     Route::post('/transfers/debit', [TransferController::class, 'debit'])->name('transfers.debit');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -55,7 +55,7 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
-    Route::get('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // TODO maybe Change to delete
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/transfers/credit', [TransferController::class, 'credit'])->name('transfers.credit');
 });
@@ -65,7 +65,7 @@ Route::group(['middleware' => 'is_grand'], function () {
     Route::get('/admins/create', [AdminController::class, 'create'])->name('admins.create');
     Route::post('/admins', [AdminController::class, 'store'])->name('admins.store');
     Route::get('/admins/{admin}/edit', [AdminController::class, 'edit'])->name('admins.edit');
-    Route::get('/admins/{admin}', [AdminController::class, 'destroy'])->name('admins.destroy');
+    Route::delete('/admins/{admin}', [AdminController::class, 'destroy'])->name('admins.destroy');
     Route::patch('/admins/{admin}', [AdminController::class, 'update'])->name('admins.update');
 });
 

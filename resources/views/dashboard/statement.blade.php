@@ -14,6 +14,7 @@
                             <th>Transaction Reference ID</th>
                             <th>Type</th>
                             <th>Amount</th>
+                            <th>Date</th>
                             <!--th>Transaction Status</th-->
                         </tr>
                     </thead>
@@ -28,6 +29,7 @@
                                         </td>
                                         <td>{{ $transfer->type }}</td>
                                         <td>${{ $transfer->amount }}</td>
+                                        <td>{{ $transfer->created_at }}</td>
                                         <!--td>{{ $transfer->status }}</td-->
                                     </tr>
                                 @endforeach
@@ -35,25 +37,12 @@
                         @endisset
                     </tbody>
                 </table>
+                {{ $transfers->links() }}
             </div>
         </div>
     </div>
     @isset($success)
         @if ($success)
-            <script>
-                var inputs = document.getElementsByTagName('input');
-                var textareas = document.getElementsByTagName('textarea');
-
-                for (const input in inputs) {
-                    input.value = null;
-                }
-
-                for (const textarea in textareas) {
-                    textareas.value = null;
-                }
-
-            </script>
-
             <!-- success Popup html Start -->
             <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
                 aria-modal="true" role="dialog">
@@ -66,8 +55,7 @@
                             Transfer Successful
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
-                                data-dismiss="modal">Done</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
                         </div>
                     </div>
                 </div>

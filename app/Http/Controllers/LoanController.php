@@ -15,15 +15,17 @@ class LoanController extends Controller
 
   public function history()
   {
-    $user = User::find(auth()->user()->id);
-    $loans = $user->loan()->orderBy('id', 'desc')->paginate(10);
+    $id = auth()->user()->id;
+    $user = User::find("$id");
+    $loans = $user->loan()->orderBy('user_id', 'desc')->paginate(10);
     return view('loans.history', compact(['loans', 'user']));
   }
 
   public function active()
   {
-    $user = User::find(auth()->user()->id);
-    $loans = $user->loan()->where('status', 'PENDING')->orderBy('id', 'desc')->paginate(10);
+    $id = auth()->user()->id;
+    $user = User::find("$id");
+    $loans = $user->loan()->where('status', 'PENDING')->orderBy('user_id', 'desc')->paginate(10);
     return view('loans.active', compact(['user', 'loans']));
   }
 

@@ -48,6 +48,7 @@
                         @endisset
                     </tbody>
                 </table>
+                {{ $loans->links() }}
             </div>
         </div>
     </div>

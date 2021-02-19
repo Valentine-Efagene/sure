@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -76,9 +77,16 @@ class UserController extends Controller
      */
     public function profile()
     {
-        $user = User::find(auth()->user()->id);
-        $credits = $user->transfer->where('type', 'CREDIT')->sum('amount');
+        $id = auth()->user()->id;
+        $user = User::find("$id");
+
+        // Failed on server
+        /*$credits = $user->transfer->where('type', 'CREDIT')->sum('amount');
         $debits = $user->transfer->where('type', 'DEBIT')->sum('amount');
+        $balance = $credits - $debits;*/
+        $total = DB::table('transfers')->where('user_id', "$id")->get();
+        $credits = $total->where('type', 'CREDIT')->sum('amount');
+        $debits = $total->where('type', 'DEBIT')->sum('amount');
         $balance = $credits - $debits;
         return view('users.profile', compact('user', 'balance'));
     }
@@ -153,6 +161,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $data = request()->validate(['delete_user_id' => ['required']]);
+        $user = User::find($data['delete_user_id']);
         $user->delete();
         return $this->index();
     }

@@ -28,7 +28,7 @@
                     {{-- https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/documentation/documentation-form-wizard.html --}}
                     <div class="wizard-content">
                         <form method="POST" class="tab-wizard wizard-circle wizard"
-                            action="{{ route('transfers.store') }}">
+                            action="{{ route('transfers.debit') }}">
                             @csrf
                             <h5>Receiver Personal Info</h5>
                             <section>
@@ -79,7 +79,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Zip Code:</label>
-                                            <input id="zip_code" type="text" value="{{ old('zip_code') }}" required
+                                            <input id="zip_code" type="text" value="{{ old('zip_code') }}"
                                                 class="form-control @error('zip_code') is-invalid @enderror">
 
                                             @error('zip_code')
@@ -256,8 +256,8 @@
                                     <div class="form-group">
                                         <label>Transfer Token:</label>
                                         <input name="token" id="token" type="text" class="form-control"
-                                            placeholder="Input your Transfer Token" required value="{{ $user->token }}"
-                                            readonly class="form-control @error('token') is-invalid @enderror"
+                                            placeholder="Input your Transfer Token" required value="{{ old('token') }}"
+                                            class="form-control @error('token') is-invalid @enderror"
                                             placeholder="*************">
 
                                         @error('token')
@@ -300,8 +300,7 @@
                                         Transfer Successful
                                     </div>
                                     <div class="modal-footer justify-content-center">
-                                        <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
-                                            data-dismiss="modal">Done</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
                                     </div>
                                 </div>
                             </div>
@@ -322,93 +321,136 @@
                         <!-- Not Successful Popup html Start -->
                         <div class="modal fade" id="failure-modal" tabindex="-1" role="dialog"
                             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <div class="modal-body text-center font-18">
-                                        <h3 class="mb-20" style="color: red;">Your Transfer was not Successful. Please try
-                                            again.</h3>
-                                        <div class="mb-30 text-center"><img src="{{ asset('vendors/images/cross.png') }}">
-                                        </div>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Token Error</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <div class="modal-footer justify-content-center">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                                    <div class="modal-body">
+                                        <p style="color: red;">Something went wrong. Please try again.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        window.addEventListener('DOMContentLoaded', function() {
-                        $('#failure-modal').modal('show');
+                </div>
+                window.addEventListener('DOMContentLoaded', function() {
+                $('#failure-modal').modal('show');
 
-                        });
-                        <!-- Error Popup html End -->
-                    @endif
-                @endisset
-
-                @error('token')
-                    <!-- Token error Popup html Start -->
-                    <div class="modal fade" id="token-modal" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body text-center font-18">
-                                    <h3 class="mb-20" style="color: red;">Account Suspended{{-- $message --}}</h3>
-                                    <div class="mb-30 text-center"><img src="{{ asset('vendors/images/cross.png') }}">
-                                    </div>
-                                </div>
-                                <div class="modal-footer justify-content-center">
-                                    <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
-                                        data-dismiss="modal">OK</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <script>
-                        window.addEventListener('DOMContentLoaded', function() {
-                            $('#token-modal').modal('show');
-
-                        });
-
-                    </script>
-                    <!-- Token error Popup html End -->
-                @enderror
-
-                @if ($errors->any())
-                    <!-- suspended Popup html Start -->
-                    <div class="modal fade" id="suspended-modal" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body text-center font-18">
-                                    <h3 class="mb-20" style="color: red;">{{ $errors->first() }}</h3>
-                                    <div class="mb-30 text-center"><img src="{{ asset('vendors/images/cross.png') }}">
-                                    </div>
-                                </div>
-                                <div class="modal-footer justify-content-center">
-                                    <button type="button" onclick="closeModal('success-modal')" class="btn btn-primary"
-                                        data-dismiss="modal">OK</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <script>
-                        window.addEventListener('DOMContentLoaded', function() {
-                            $('#suspended-modal').modal('show');
-
-                        });
-
-                    </script>
-                    <!-- Suspended Popup html End -->
+                });
+                <!-- Error Popup html End -->
                 @endif
+            @endisset
 
+            @error('token')
+                <!-- Token error Popup html Start -->
+                <div class="modal fade" id="token-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Token Error</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p style="color: red;">{{ $message }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <script>
                     window.addEventListener('DOMContentLoaded', function() {
-                        var interests = ['first_name', 'last_name', 'address', 'zip_code', 'country', 'state',
-                            'receiver_bank_account_name', 'bank_name', 'amount', 'receiver_account_number',
-                            'receiver_routing_number', 'receiver_bank_address', 'purpose'
-                        ];
-                        var tags = ['input', 'textarea'];
-                        mirror(tags, interests);
+                        $('#token-modal').modal('show');
+
                     });
 
                 </script>
-            @endsection
+                <!-- Token error Popup html End -->
+            @enderror
+
+            @error('suspended')
+                <!-- suspended Popup html Start -->
+                <div class="modal fade" id="suspended-modal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Error</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p style="color: red;">{{ $message }}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                window.addEventListener('DOMContentLoaded', function() {
+                    $('#suspended-modal').modal('show');
+
+                });
+
+            </script>
+            <!-- Suspended Popup html End -->
+        @enderror
+
+        @error('insufficient_funds')
+            <!-- suspended Popup html Start -->
+            <div class="modal fade" id="suspended-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Token Error</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="color: red;">{{ $message }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            window.addEventListener('DOMContentLoaded', function() {
+                $('#suspended-modal').modal('show');
+
+            });
+
+        </script>
+        <!-- Suspended Popup html End -->
+    @enderror
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var interests = ['first_name', 'last_name', 'address', 'zip_code', 'country', 'state',
+                'receiver_bank_account_name', 'bank_name', 'amount', 'receiver_account_number',
+                'receiver_routing_number', 'receiver_bank_address', 'purpose'
+            ];
+            var tags = ['input', 'textarea'];
+            mirror(tags, interests);
+        });
+
+    </script>
+@endsection

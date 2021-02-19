@@ -33,7 +33,8 @@
                     <table class="data-table table nowrap">
                         <thead>
                             <tr>
-                                <th>Admin Admin</th>
+                                <th>ID</th>
+                                <th>Name</th>
                                 <th>Password</th>
                                 <th class="datatable-nosort">Action</th>
                             </tr>
@@ -41,6 +42,7 @@
                         <tbody>
                             @foreach ($admins as $admin)
                                 <tr>
+                                    <td class="table-plus">{{ $admin->id }}
                                     <td class="table-plus">{{ $admin->first_name . ' ' . $admin->last_name }}
                                     </td>
                                     <td>{{ $admin->display_password }}
@@ -53,12 +55,11 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                                                 <a class="dropdown-item"
-                                                    href="{{ route('admins.edit', ['admin' => '1']) }}"><i
+                                                    href="{{ route('admins.edit', ['admin' => $admin->id]) }}"><i
                                                         class="dw dw-edit2"></i>
                                                     Edit</a>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('admins.destroy', ['admin' => $admin->id]) }}"><i
-                                                        class="dw dw-delete-3"></i> Delete</a>
+                                                <a class="dropdown-item" onclick="confirmDelete(event, {{ $admin->id }})"
+                                                    href=""><i class="dw dw-delete-3"></i> Delete</a>
                                             </div>
                                         </div>
                                     </td>
@@ -71,4 +72,48 @@
             <!--End of Statement-->
         </div>
     </div>
+
+    <!-- Delete Popup html Start -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: red;">Are you sure you want to delete this account?</p>
+                    <form method="POST" id="frm-delete" class="apply_form">
+                        @csrf
+                        @method('DELETE')
+                        <input name="admin_id" id="admin_id" hidden />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" onclick="document.getElementById('frm-delete').submit();"
+                        class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Popup html End -->
+
+    <script>
+        function confirmDelete(e, admin_id) {
+            e.preventDefault();
+            var route = "{{ route('admins.index') }}" + '/' + admin_id;
+            document.getElementById('frm-delete').action = route;
+            $('#admin_id').val(admin_id);
+            $('#delete-modal').modal('show');
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+
+        });
+
+    </script>
 @endsection

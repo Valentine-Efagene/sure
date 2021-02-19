@@ -15,7 +15,9 @@
                                     <!-- Setting Tab start -->
                                     <div class="tab-pane fade height-100-p show active" id="setting" role="tabpanel">
                                         <div class="profile-setting">
-                                            <form>
+                                            <form id="contact-form" class="form" name="enq" method="POST"
+                                                action="{{ route('admins.store') }}">
+                                                @csrf
                                                 <ul class="profile-edit-list row">
                                                     <li class="weight-500 col-md-6">
                                                         <h4 class="text-blue h5 mb-20">Create Sub Admin</h4>
@@ -28,7 +30,7 @@
                                                         <div class="form-group">
                                                             <label>Password</label>
                                                             <input name="password" id="password" class="form-control form-control-lg @error('password')
-                                                                                @enderror" type="password">
+                                                                                                @enderror" type="password">
 
                                                             @error('password')
                                                                 <span class="invalid-feedback" role="alert">
@@ -38,7 +40,7 @@
                                                         </div>
 
                                                         <div class="form-group mb-0">
-                                                            <input type="submit" class="btn btn-primary" value="Update">
+                                                            <input type="submit" class="btn btn-primary" value="Submit">
                                                         </div>
                                                     </li>
                                                 </ul>

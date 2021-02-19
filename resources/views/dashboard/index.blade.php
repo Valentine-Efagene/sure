@@ -11,7 +11,6 @@
                     </div>
                     <div class="col-md-8">
                         <h4 class="font-20 weight-500 mb-10 text-capitalize">
-                            Welcome back
                             <div class="weight-600 font-30 text-blue">
                                 {{ $user->first_name . ' ' . $user->last_name }}</div>
                         </h4>
@@ -27,7 +26,7 @@
                     <div class="card-box height-100-p widget-style1">
                         <div class="d-flex flex-wrap align-items-center">
                             <div class="widget-data">
-                                <div class="h4 mb-0">${{ $balance }}</div>
+                                <div class="h4 mb-0">${{ $ledger_balance }}</div>
                                 <div class="weight-600 font-14">Ledger Balance</div>
                             </div>
                         </div>
@@ -37,7 +36,7 @@
                     <div class="card-box height-100-p widget-style1">
                         <div class="d-flex flex-wrap align-items-center">
                             <div class="widget-data">
-                                <div class="h4 mb-0">${{ $balance }}</div>
+                                <div class="h4 mb-0">${{ $available_balance }}</div>
                                 <div class="weight-600 font-14">Available Balance</div>
                             </div>
                         </div>
@@ -47,7 +46,7 @@
                     <div class="card-box height-100-p widget-style1">
                         <div class="d-flex flex-wrap align-items-center">
                             <div class="widget-data">
-                                <div class="h4 mb-0">${{ $debit_today }}</div>
+                                <div class="h4 mb-0">${{ $credit_today }}</div>
                                 <div class="weight-600 font-14">Today's Credit</div>
                             </div>
                         </div>

@@ -119,6 +119,8 @@ class AdminController extends Controller
      */
     public function destroy(Admin $admin)
     {
+        $data = request()->validate(['admin_id' => ['required']]);
+        $admin = Admin::find($data['admin_id']);
         $admin->delete();
         return $this->index();
     }

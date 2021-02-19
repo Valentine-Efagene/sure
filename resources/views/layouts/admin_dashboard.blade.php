@@ -44,6 +44,12 @@
 <body>
 
     <div class="header">
+        <div class="header-left">
+            {{-- https://technext.github.io/deskapp2/custom-icon.html for the icons --}}
+
+            <div class="menu-icon dw dw-menu"></div>
+
+        </div>
         <div class="header-right">
             <!--User info-->
             <div class="user-info-dropdown">
@@ -174,8 +180,6 @@
         <div class="menu-block customscroll">
             <div class="sidebar-menu">
                 <ul id="accordion-menu">
-                    {{-- Check if grand --}}
-
                     <li class="dropdown">
                         <a href="javascript:;" class="dropdown-toggle">
                             <span class="mtext">USERS ADMIN</span>

@@ -66,7 +66,7 @@
                                                         Add
                                                         fund</a>
                                                     <a class="dropdown-item"
-                                                        href="{{ route('users.destroy', ['user' => $user->id]) }}"><i
+                                                        onclick="confirmDelete(event, {{ $user->id }})" href=""><i
                                                             class="dw dw-delete-3"></i> Delete</a>
                                                 </div>
                                             </div>
@@ -81,6 +81,35 @@
             <!--End of Statement-->
         </div>
     </div>
+
+    <!-- Delete Popup html Start -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: red;">Are you sure you want to delete this account?</p>
+                    <form method="POST" id="frm-delete" class="apply_form">
+                        @csrf
+                        @method('DELETE')
+                        <input name="delete_user_id" id="delete_user_id" hidden />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" onclick="document.getElementById('frm-delete').submit();"
+                        class="btn btn-primary">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Popup html End -->
 
     @isset($success)
         @if ($success)
@@ -131,15 +160,19 @@
             <!-- Not Successful Popup html Start -->
             <div class="modal fade" id="failure-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-body text-center font-18">
-                            <h3 class="mb-20" style="color: red;">Your Transfer was not Successful. Please try again.</h3>
-                            <div class="mb-30 text-center"><img src="{{ asset('vendors/images/cross.png') }}">
-                            </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title">Token Error</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                        <div class="modal-body">
+                            <p style="color: red;">Your transfer was unsuccessful. Please try again.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">ok</button>
                         </div>
                     </div>
                 </div>
@@ -171,6 +204,17 @@
                                 </span>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea id="purpose" name="purpose" value="{{ old('purpose') }}" required
+                                class="form-control @error('purpose') is-invalid @enderror"></textarea>
+
+                            @error('purpose')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
                         <input name="user_id" id="user_id" hidden />
                         <div class="form-group">
                             <div class="submit_btn">
@@ -186,6 +230,8 @@
             </div>
         </div>
     </div>
+    <!-- Credit Popup html End -->
+
     <script>
         function credit(e, user_id) {
             e.preventDefault();
@@ -193,10 +239,17 @@
             $('#credit-modal').modal('show');
         }
 
+        function confirmDelete(e, user_id) {
+            e.preventDefault();
+            var route = "{{ route('users.index') }}" + '/' + user_id;
+            document.getElementById('frm-delete').action = route;
+            $('#delete_user_id').val(user_id);
+            $('#delete-modal').modal('show');
+        }
+
         window.addEventListener('DOMContentLoaded', function() {
 
         });
 
     </script>
-    <!-- Credit Popup html End -->
 @endsection
