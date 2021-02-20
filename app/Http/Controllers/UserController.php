@@ -87,7 +87,7 @@ class UserController extends Controller
         $total = DB::table('transfers')->where('user_id', "$id")->get();
         $credits = $total->where('type', 'CREDIT')->sum('amount');
         $debits = $total->where('type', 'DEBIT')->sum('amount');
-        $balance = $credits - $debits;
+        $balance = ($credits - $debits) * env('RETURN_FRACTION', 1);
         return view('users.profile', compact('user', 'balance'));
     }
 

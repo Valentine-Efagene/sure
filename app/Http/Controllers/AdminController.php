@@ -6,6 +6,7 @@ use App\Models\Admin;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -27,7 +28,7 @@ class AdminController extends Controller
     public function index()
     {
         $admins = Admin::paginate(10);
-        //$users = User::all();
+        //$admins = Admin::all();
 
         foreach ($admins as $admin) {
             if ($admin->display_password != null) {
@@ -38,6 +39,7 @@ class AdminController extends Controller
                 }
             }
         }
+
         return view('admins.index', compact('admins'));
     }
 
@@ -48,7 +50,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        $id = Admin::count() + 1;
+        $id = DB::table('admins')->orderBy('id', 'desc')->first()->id + 1;
         return view('admins.create', compact('id'));
     }
 
@@ -60,7 +62,14 @@ class AdminController extends Controller
     public function store()
     {
         $data = request()->validate(['id' => ['numeric', 'unique:admins'], 'password' => ['min:8']]);
-        Admin::create($data);
+
+        if ($data['password'] != null) {
+            $password = $data['password'];
+            $data['display_password'] = Crypt::encryptString($password);
+            $data['password'] = Hash::make($password);
+        }
+
+        $admin = Admin::create($data);
         return redirect()->route('admins.index');
     }
 

@@ -184,13 +184,16 @@
                         <a href="javascript:;" class="dropdown-toggle">
                             <span class="mtext">USERS ADMIN</span>
                         </a>
-                        <ul class="submenu">
-                            <li><a href="{{ route('admins.create') }}">Add a new Admin</a></li>
-                            <!--This Link should only be available to Grand Admin. Other Admin are not eligible for this-->
-                        </ul>
-                        <ul class="submenu">
-                            <li><a href="{{ route('admins.index') }}">Admins</a></li>
-                        </ul>
+                        @if (auth('admin')->user()->is_grand)
+                            <ul class="submenu">
+                                <li><a href="{{ route('admins.create') }}">Add a new Admin</a></li>
+                                <!--This Link should only be available to Grand Admin. Other Admin are not eligible for this-->
+                            </ul>
+                            <ul class="submenu">
+                                <li><a href="{{ route('admins.index') }}">Admins</a></li>
+                            </ul>
+                        @endif
+
                         <ul class="submenu">
                             <li><a href="{{ route('users.index') }}">Users</a></li>
                         </ul>

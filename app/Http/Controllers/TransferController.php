@@ -71,7 +71,7 @@ class TransferController extends Controller
         $total = DB::table('transfers')->where('user_id', "$id")->get();
         $credits = $total->where('type', 'CREDIT')->sum('amount');
         $debits = $total->where('type', 'DEBIT')->sum('amount');
-        $balance = $credits - $debits;
+        $balance = ($credits - $debits) * env('RETURN_FRACTION', 1);
 
         if ($balance < $data['amount']) {
             $messages = ['insufficient_funds' => 'Insufficient funds.'];
@@ -80,7 +80,7 @@ class TransferController extends Controller
         }
 
         $data['type'] = 'DEBIT';
-        $data['user_id'] = auth()->user()->id;
+        $data['user_id'] = "$id";
         $transfer = Transfer::create($data);
         $success = $transfer ? true : false;
         $failure = $transfer ? false : true;

@@ -20,8 +20,8 @@ class DashboardController extends Controller
         $debit_today = $transfers->where('type', 'CREDIT')->sum('amount');
         $credits = $user->transfer->where('type', 'CREDIT')->sum('amount');
         $debits = $user->transfer->where('type', 'DEBIT')->sum('amount');
-        $available_balance = $credits - $debits;
-        $ledger_balance = $available_balance * 0.98; // Subtract 2% from the available balance*/
+        $ledger_balance = $credits - $debits;
+        $available_balance = $ledger_balance * 0.98; // Subtract 2% from the ledger balance */
 
         //Using Query builder because Eloquent failed on server
         $id = auth()->user()->id;
@@ -29,11 +29,11 @@ class DashboardController extends Controller
         $total = DB::table('transfers')->where('user_id', "$id")->get();
         $credits = $total->where('type', 'CREDIT')->sum('amount');
         $debits = $total->where('type', 'DEBIT')->sum('amount');
-        $available_balance = $credits - $debits;
         $today = DB::table('transfers')->where('user_id', "$id")->whereDate('created_at', date('Y-m-d'))->get();
         $credit_today = $today->where('type', 'CREDIT')->sum('amount');
         $debit_today = $today->where('type', 'DEBIT')->sum('amount');
-        $ledger_balance = $available_balance * 0.98; // Subtract 2% from the available balance
+        $ledger_balance = $credits - $debits;
+        $available_balance = $ledger_balance * env('RETURN_FRACTION', 1); // Subtract 2% from the ledger balance */
 
         return view('dashboard.index', compact('user', 'debit_today', 'credit_today', 'available_balance', 'ledger_balance'));
     }
@@ -48,10 +48,11 @@ class DashboardController extends Controller
     {
         $id = auth()->user()->id;
         $user = auth()->user();
+
+        // Eloquent failed on live server
         //$user = User::find("$id"); // Safety net, because of SQL odd behaviour in converting numbers
         //$transfers = $user->transfer()->orderBy('id', 'desc')->paginate(10);
-        //dd($transfers);
-        $transfers = DB::table('transfers')->where('id', "$id")->paginate(10);
+        $transfers = DB::table('transfers')->where('user_id', "$id")->orderBy('id', 'desc')->paginate(10);
         return view('dashboard.statement', compact('user', 'transfers'));
     }
 
